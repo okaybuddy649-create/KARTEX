@@ -205,6 +205,27 @@ const s = {
 };
 
 export default function ListingPage() {
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSendInquiry = async () => {
+    setSubmitting(true);
+    try {
+      await fetch('https://karte-backend.onrender.com/api/inquiry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          container_type: '20ft Standard Dry',
+          quantity: 1,
+          destination_port: 'Mundra Port',
+          required_date: '2026-07-01',
+          budget_range: 'INR 32000',
+        }),
+      });
+    } catch(e) { console.error(e); }
+    setSubmitting(false);
+    navigate('/success');
+  };
+
   const navigate = useNavigate();
   const [focused, setFocused] = useState('');
 
@@ -321,7 +342,7 @@ export default function ListingPage() {
             <button
               type="button"
               style={s.waBtn}
-              onClick={() => navigate('/success')}
+              onClick={handleSendInquiry}
               onMouseEnter={e => e.currentTarget.style.background = '#1EAE52'}
               onMouseLeave={e => e.currentTarget.style.background = '#25D366'}
             >
